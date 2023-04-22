@@ -4,8 +4,12 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <cstring>
+#include <iostream>
+
 #define PORT 8007
+
 void handle_connect(int newsockfd);
+
 int main(int argc, char *argv[])
 {
     int sockfd, newsockfd;
@@ -14,6 +18,7 @@ int main(int argc, char *argv[])
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         /* error */
+        std::cerr << "Failed to create socket" << std::endl;
     }
     bzero((void *)&serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
@@ -22,6 +27,7 @@ int main(int argc, char *argv[])
     if (bind(sockfd, (struct sockaddr *)&serv_addr,
              sizeof(serv_addr)) < 0)
     { /* error */
+        std::cerr << "Failed to bind server to socket" << std::endl;
     }
     listen(sockfd, 5);
     for (;;)
@@ -31,6 +37,7 @@ int main(int argc, char *argv[])
                            (struct sockaddr *)&cli_addr, &clilen);
         if (newsockfd < 0)
         { /* error */
+        std::cerr << "Failed to accept socket" << std::endl;
         }
         handle_connect(newsockfd);
     }
