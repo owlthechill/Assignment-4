@@ -1,9 +1,6 @@
-CC=g++
-CFLAG=-g -Wall -pedantic -L -lastyle-2.06d
 
 server:
-	$(CC) $(CFLAG) -o server server.cpp
-
+	g++ -g -Wall -pedantic -L -lastyle ./server.cpp ./libastyle-2.06d.so -o server
 clean:
 	rm -f server
 
