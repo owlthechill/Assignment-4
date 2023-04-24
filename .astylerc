@@ -1,0 +1,26 @@
+# No backup files
+--suffix=none
+
+--exclude="build"
+--exclude="build_current"
+--exclude="resolve_symlinks"
+--exclude="resolved_dependencies"
+--ignore-exclude-errors-x
+
+--style=allman
+--pad-header
+--unpad-paren
+--convert-tabs
+--indent=spaces=4
+--indent-preproc-block
+--align-pointer=type
+--align-reference=type
+
+--keep-one-line-blocks
+--keep-one-line-statements
+--min-conditional-indent=0
+--max-instatement-indent=60
+
+--max-code-length=80
+--break-after-logical
+--lineend=linux
