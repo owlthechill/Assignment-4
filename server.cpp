@@ -133,7 +133,7 @@ void parse(FILE *fp, std::map<std::string, std::string> &options, std::string &d
         return;
     }
 
-    for (;;) {
+    for (;;) { // input grabber for size, styles, and other options
         input = fgets(buffer, 1024, fp);
 
         if (input == "\n") {
@@ -152,7 +152,7 @@ void parse(FILE *fp, std::map<std::string, std::string> &options, std::string &d
             leftOption = input.substr(0, middle_pos);
             rightOption = input.substr(middle_pos + 1);
 
-            if (leftOption!="SIZE" && leftOption != "mode" && leftOption != "style") // 
+            if (leftOption!="SIZE" && leftOption != "mode" && leftOption != "style") // checking for non-option
                 throw std::runtime_error("ERROR\n"+leftOption+"\n\nBad option\n");
         } else { // will throw the runtime error
             throw std::runtime_error("ERROR\n"+input+"\n\nBad option\n");
