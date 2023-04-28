@@ -81,7 +81,7 @@ void handle_connect(int newsockfd)
     for (auto const& [key, val] : options) {
         if (key == "SIZE")
             continue;
-        
+
         std::string temp = key + "=" + val + "\n";
         parameter.append(temp);
     }
@@ -148,21 +148,21 @@ void parse(FILE *fp, std::map<std::string, std::string> &options, std::string &d
         size_t middle_pos = input.find("=");
         std::string leftOption, rightOption;
 
-        if (middle_pos != std::string::npos && middle_pos > 0 && middle_pos < input.length() - 1) {
+        if (middle_pos != std::string::npos && middle_pos > 0 && middle_pos < input.length() - 1) { // If there's any options before and after the =
             leftOption = input.substr(0, middle_pos);
             rightOption = input.substr(middle_pos + 1);
 
-            if (leftOption!="SIZE" && leftOption != "mode" && leftOption != "style") 
+            if (leftOption!="SIZE" && leftOption != "mode" && leftOption != "style") // 
                 throw std::runtime_error("ERROR\n"+leftOption+"\n\nBad option\n");
-        } else {
-            throw std::runtime_error("ERROR\n("+input+"\n\nBad option\n");
+        } else { // will throw the runtime error
+            throw std::runtime_error("ERROR\n"+input+"\n\nBad option\n");
         }
 
-        if (leftOption == "SIZE") {
+        if (leftOption == "SIZE") { // if SIZE is found, convert it to an integer
             try {
                 size = stoi(rightOption);
             } catch (const std::invalid_argument &e) {
-                throw std::runtime_error("ERROR\n("+input+"\n\nBad option\n");
+                throw std::runtime_error("ERROR\n"+input+"\n\nBad option\n");
                 std::cerr << e.what() << std::endl;
             }
         }
@@ -175,6 +175,6 @@ void parse(FILE *fp, std::map<std::string, std::string> &options, std::string &d
     }
 
     char* docBuffer = new (std::nothrow) char [size];
-    fread(docBuffer, size+1, 1, fp);
+    fread(docBuffer, size + 1, 1, fp);
     doc = docBuffer;
 }
