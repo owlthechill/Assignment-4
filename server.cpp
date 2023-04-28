@@ -11,6 +11,9 @@
 
 #define PORT 8007
 #define MAX_FILE_SIZE 20480
+
+std::string head, doc;
+std::map<std::string, std::string> options;
 bool Req_Error;
 std::string Req_Estr;
 
@@ -64,8 +67,6 @@ int main(int argc, char *argv[])
 void handle_connect(int newsockfd)
 {
     FILE *fp = fdopen(newsockfd, "r+");
-    std::string head, doc;
-    std::map<std::string, std::string> options;
 
     try {
         parse(fp, options, doc);
@@ -78,28 +79,27 @@ void handle_connect(int newsockfd)
 
     std::string parameter = "";
     for (auto const& [key, val] : options) {
-        if (key == "SIZE") {
+        if (key == "SIZE")
             continue;
-        }
+        
         std::string temp = key + "=" + val + "\n";
         parameter.append(temp);
     }
 
     Req_Error = false;
     Req_Estr = "";
-
-
+    
     char* textOut = AStyleMain(doc.c_str(), parameter.c_str(), ASErrorHandler, ASMemoryAlloc);
-
+    // if an error occurred create error message and send msg to client
     if (Req_Error) {
-        std::string ret_message = "ERR\nSIZE=" + std::to_string(Req_Estr.size()) + "\n\n" + Req_Estr.c_str();
+        std::string ret_message("ERR\nSIZE=" + std::to_string(Req_Estr.size()) + "\n\n" + Req_Estr.c_str());
         fprintf(fp, "%s", ret_message.c_str());
     } else {
-        std::string ret_message = "OK\nSIZE=" + std::to_string(strlen(textOut)) + "\n\n" + textOut;
+        std::string ret_message("OK\nSIZE=" + std::to_string(strlen(textOut)) + "\n\n" + textOut);
         fprintf(fp, "%s", ret_message.c_str());
-        std::cout << ret_message << std::endl;
-        
     }
+
+    fclose(fp);
 }
 
 void ASErrorHandler(int errorNumber, const char* errorMessage) {   
@@ -175,7 +175,6 @@ void parse(FILE *fp, std::map<std::string, std::string> &options, std::string &d
     }
 
     char* docBuffer = new (std::nothrow) char [size];
-    fread(docBuffer, size, 1, fp);
+    fread(docBuffer, size+1, 1, fp);
     doc = docBuffer;
-    return;
 }
